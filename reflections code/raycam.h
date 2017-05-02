@@ -20,7 +20,7 @@
 #include <cmath>
 #include "ThreeDim.h"
 
-const int MAXREFLECTIONS = 40;
+const int MAXREFLECTIONS = 4;
 
 // @@@@@@@@@@@@@@@@@@@@@ Coefficients3 class @@@@@@@@@@@@@@@@
 class Coefficients3 { // holds a  3-tuple.  Intended for coefficients that are not colors: ambient, diffuse, specular.

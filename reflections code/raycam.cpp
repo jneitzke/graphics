@@ -327,10 +327,10 @@ void Cam::raytrace(scene& scn, int blockSize)
 	double t;
 	for (int row = 0; row < nRows; row += blockSize)   // one pixel at a time
 	{
-		//printf("row %d \n", row);
+		printf("row %d \n", row);
 		for (int col = 0; col < nCols; col += blockSize)
 		{
-			//printf("c%d ", col);
+		//	printf("c%d ", col);
 			//build the ray's direction				
 			x = -W + col * blockWidth;
 			y = -H + row * blockHeight;
@@ -339,7 +339,7 @@ void Cam::raytrace(scene& scn, int blockSize)
 				-nearDist * n.deltaZ() + x * u.deltaZ() + y * v.deltaZ());
 
 			t = scn.timeHit2(theRay);
-
+		//	printf("time %f ", t);
 			//  find all intersections of the ray with objects in the scene
 			//identify the intersection closest to the eye
 			// find the color of the light returning to the eye
@@ -354,7 +354,7 @@ void Cam::raytrace(scene& scn, int blockSize)
 				//			printf("%d ",which);
 				int texture;
 				texture = selectTextureFunction(textureNumber, where, scn.getnthobject(which)->step);
-				//printf("%d", texture);
+			//	printf("%d", texture);
 				Material whichmaterial;
 				//  retrieve material
 
@@ -456,7 +456,9 @@ void Cam::setProjectionMatrix()
 void Cam::setShape(double vAngle, double asp, double nr, double fr)
 { // load projection matrix and camera values
 	viewAngle = vAngle; // viewangle in degrees - must be < 180
+	printf("angle %f ", viewAngle);
 	aspect = asp; nearDist = nr; farDist = fr;
+	printf("nearDist %f ", nearDist);
 	H = nearDist * tan(M_PI * viewAngle / (2.0 * 180));
 	W = aspect * H;
 	setProjectionMatrix();
@@ -1158,7 +1160,7 @@ double superellipsoid::timeHit(Ray r)    // smallest positive time a ray hits a 
 	xfrmRay(genray, aff, r);  // ray from camera, transformed to generic world
 	//  probe to find object, defined implicitly
 	double t = 0;  // start at camera
-	double maxdistance = 10.0;  //  furthest distance considered
+	double maxdistance = 20.0;  //  furthest distance considered
 	double finestDivision = 0.0001;  // finest step considered
 	double increment = 0.01;  // initial increment -- smaller avoids missing object, larger is faster
 	while ((implicitSuper(genray, t, superexponent) > 0) && (t < maxdistance + 1))  //  find first contact with object; max distance
@@ -1298,21 +1300,21 @@ double circularWave::timeHit(Ray r)    // smallest positive time a ray hits a ci
 	//  probe to find object, defined implicitly
 	double t = 0;  // start at camera
 	double maxdistance = 100.0;  //  furthest distance considered
-	double finestDivision = 0.0001;  // finest step considered
-	double increment = 0.1;  // initial increment -- smaller avoids missing object, larger is faster
-	//	printf("%f", implicitParam(genray, t));
+	double finestDivision = 0.01;  // finest step considered
+	double increment = 1.0;  // initial increment -- smaller avoids missing object, larger is faster
+	 //	printf("%f", implicitParam(genray, t));
 	while ((implicitParam(genray, t) > 0) && (t < maxdistance + 1))  //  find first contact with object; max distance
 	{
 		t += increment;  // probe forward
-		//		printf("%f", implicitParam(genray, t));
+			//printf("%f", implicitParam(genray, t));
 	}
-	t -= increment;  // back off one step, before contact
+	
 	if (t > maxdistance)
 	{
 		return -112;  //  clean miss
 	}
 	//  did not miss
-
+	t -= increment;  // back off one step, before contact
 	while (increment > finestDivision)    //  try finer increments to fine-tune contact
 	{
 		while (implicitParam(genray, t) > 0)
@@ -1322,7 +1324,7 @@ double circularWave::timeHit(Ray r)    // smallest positive time a ray hits a ci
 		t -= increment;  // back off one step, before contact
 		increment /= 10;  //  make increment finer by factor of 10
 	}
-	//printf(" %f", t);
+//	printf(" %f", t);
 	return t;
 }
 
@@ -1394,7 +1396,7 @@ double scene::timeHit2(Ray r)
 		if (((time > epsilon) && (time < min)) || ((time > epsilon) && (min <= 0.0)))
 		{
 			min = time;
-			// 			printf("new min time %f \n",time  );
+			 		//	printf("new min time %f \n",time  );
 		}
 	}
 
@@ -1468,7 +1470,7 @@ Color3 scene::diffuse(Ray r, int what, Material mat, Point3 where, vector3 norm)
 		{
 			time = timeHit2(ra);  // positive if light obscured
 			which = whatHit2(ra);
-			//		printf(" %f  ", time);
+				//	printf(" blocked %f  ", time );
 			if (which != what)
 			{
 				if (time < epsilon)  //  epsilon -- to avoid current surface

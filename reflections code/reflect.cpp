@@ -18,8 +18,8 @@
 #include "raycam.h" // camera class
 
 Cam cam;   // global camera object
-int wid = 750;
-int hig = 750;
+int wid = 500;
+int hig = 500;
 int wideangle = 70;
 
 //  myKeyboard
@@ -128,184 +128,71 @@ void display(void)
 	Material material1;
 	Material material2;
 
+		mat.set4x4(1.0, 0, 0, -4.0,
+		0, 0, -10, -2.7,
+		00, 1, 0, -1,
+		0, 0, 0, 1);
+	cw = new circularWave;
+	cw->textureNumber =		SOLID;
+	cw->step = 4;
+	cw->aff.set(toAffine4(inverse(mat)));
+	material1.reflective.set(0.8, 0.2, 0.7);
+	material1.ambient.set(0.2, 0.073, 0.022);// 
+	material1.emissive.set(0.10, 0.20, 0.10);
+	material1.diffuse.set(0.33, 0.1370, 0.0228);
+	material1.specular.set(0.8758, 0.71938, 0.086);
+	material1.specularExponent = 10.8;
+ 
+	cw->mat1 = material1;
+	cw->mat2 = material1;
 
-	mat.set4x4(1.8, 0.0, 0.0, -1.0,  //central sphere
-		0.0, 1.8, 0.0, 2.8,
-		0.0, 0.0, 1.8, -1.0,
-		0.0, 0.0, 0.0, 1.0);
-	sp = new sphere();
-	sp->textureNumber = SOLID;
+	sc.setActiveobjects(1);
+	sc.setnthobject(1, cw);
+
+
+		mat.set4x4(0.8, 0, 0, 2.2,
+		0, 0.0, 1.2, 1.7,
+		0, .30, 0.0, 0,
+		0, 0, 0, 1);
+
+	sp = new sphere;
+	sp->textureNumber = CHECKERBOARD;
+	sp->step = 9;
 	sp->aff.set(toAffine4(inverse(mat)));
-	material1.reflective.set(1.0, 1.0, 1.0);
-	material1.ambient.set(0.1, 0.1, 0.1);
-	material1.emissive.set(0.0, 0.0, 0.0);
-	material1.diffuse.set(0.1, 0.1, 0.1);
-	material1.specular.set(1.0, 1.0, 1.0);
-	material1.specularExponent = 100;
+	material1.reflective.set(0.8, 0.2, 0.7);
+	material1.ambient.set(0.29, 0.073, 0.022);// 
+	material1.emissive.set(0.10, 0.20, 0.30);
+	material1.diffuse.set(0.43, 0.270, 0.728);
+	material1.specular.set(0.5758, 0.98, 0.586);
+	material1.specularExponent = 112.8;;
 
-	material2.reflective.set(.18, .181, .18);
-	material2.ambient.set(0.28, 0.27, 0.16);
-	material2.emissive.set(0.17, 0.17, 0.2);
-	material2.diffuse.set(0.394, 0.35, 0.25);
-	material2.specular.set(0.8, 0.8, 0.2);
+	material2.reflective.set(0.2, 0.8, 0.7);
+	material2.ambient.set(0.1, 0.8, 0.4);
+	material2.emissive.set(0.2, 0.18, 0.2);
+	material2.diffuse.set(0.514, 0.75, 0.25);
+	material2.specular.set(0.48, 0.8, 0.92);
 	material2.specularExponent = 11;
 
 	sp->mat1 = material1;
-	sp->mat2 = material1;
-
-	sc.setActiveobjects(1);
-	sc.setnthobject(1, sp);
-
-	mat.set4x4(4, 0, 0, 0,  // board top
-		0, 0, -4, 0,
-		0, 4, 0, 0,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = CHECKERBOARD;
-	sq->step = 2;
-	sq->aff.set(toAffine4(inverse(mat)));
-	sq->mat1.reflective.set(.323, .123, .523);
-	sq->mat1.ambient.set(159.0 / 255.0 / 3, 0.00, 197.0 / 255.0 / 3);// purple
-	sq->mat1.emissive.set(0.0, 0.00, 0.00);
-	sq->mat1.diffuse.set(159.0 / 255.0 / 3, 0.00, 197.0 / 255.0 / 3);
-	sq->mat1.specular.set(159.0 / 255.0 / 6, 0.00, 197.0 / 255.0 / 6);
-	sq->mat1.specularExponent = 12.8;
-
-	sq->mat2.reflective.set(.146, .146, .146);
-	sq->mat2.ambient.set(0.03, 0.03, 0.03);
-	sq->mat2.emissive.set(0.0, 0.0, 0.0);
-	sq->mat2.diffuse.set(0.15, 0.15, 0.15);
-	sq->mat2.specular.set(0.038, 0.038, 00.2);
-	sq->mat2.specularExponent = 11;
+	sp->mat2 = material2;
 
 	sc.setActiveobjects(2);
-	sc.setnthobject(2, sq);
+	sc.setnthobject(2, sp);
 
-	mat.set4x4(0, 0, 4, 4,// FRONT RIGHT
-		0, 0.5, 0, -.4999,
-		4, 0, 0, 0,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = CHECKERBOARD;
-	sq->step = 4;
-	sq->aff.set(toAffine4(inverse(mat)));
-	material1.ambient.set(0, 0, 0);
-	material1.emissive.set(0.4, 0.1, 0.1);
-	material1.diffuse.set(0.0, 0.00, 0.0);
-	material1.specular.set(0, 0, 0);
-	material1.specularExponent = 12.8;
-	material1.reflective.set(0.8, 0.8, 0.8);
-
-	sq->mat1 = material1;
-
-	sq->mat2.ambient.set(.2, .3, .4);
-	sq->mat2.emissive.set(0, 0, 0);
-	sq->mat2.diffuse.set(.4, .2, .1);
-	sq->mat2.specular.set(.2, .2, .2);
-	sq->mat2.specularExponent = 4;
-	sq->mat2.reflective.set(.3, .3, .3);
-
-	sc.setActiveobjects(3);
-	sc.setnthobject(3, sq);
-
-	mat.set4x4(4, 0, 0, 0,   /// FRONT LEFT 
-		0, 0.5, 0, -.5,
-		0, 0, 4, 4,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = CHECKERBOARD;
-	sq->step = 4;
-	sq->aff.set(toAffine4(inverse(mat)));
-	sq->mat1 = material1;
-	sq->mat2 = material2;
-
-	sc.setActiveobjects(4);
-	sc.setnthobject(4, sq);
-
-	mat.set4x4(3.4, 0, 0, 0,  // RIGHT MIRROR
-		0, 3, 0, 3.1,
-		0, 0, 3.4, -6,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = SOLID;
-	sq->step = 4;
-	sq->aff.set(toAffine4(inverse(mat)));
-	sq->mat1.ambient.set(0.01, 0.01, 0.01);
-	sq->mat1.emissive.set(0.0, 0.0, 0.0);
-	sq->mat1.diffuse.set(0.01, 0.01, 0.01);
-	sq->mat1.specular.set(0, 0, 0);
-	sq->mat1.specularExponent = 12.8;
-	sq->mat1.reflective.set(1, 1, 1);
-
-	sc.setActiveobjects(5);
-	sc.setnthobject(5, sq);
-
-	mat.set4x4(3.6, 0, 0, 0,  //RIGHT MIRROR FRAME
-		0, 3.2, 0, 3.1,
-		0, 0, 3.6, -6.01,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = SOLID;
-	sq->step = 4;
-	sq->aff.set(toAffine4(inverse(mat)));
-	sq->mat1.ambient.set(223.0 / 255.0 / 2, 115.0 / 255.0 / 2, 0.5);   //heliotrope, split ambient/diffuse
-	sq->mat1.emissive.set(0, 0, 0);
-	sq->mat1.diffuse.set(223.0 / 2.0 / 255, 115.0 / 255.0 / 2, 0.5);
-	sq->mat1.specular.set(0, 0, 0);
-	sq->mat1.specularExponent = 12.8;
-	sq->mat1.reflective.set(0, 0, 0);
-
-	sc.setActiveobjects(6);
-	sc.setnthobject(6, sq);
-
-	mat.set4x4(0, 0, 3.4, -6,  // left MIRROR
-		0, 3, 0, 3.1,
-		-3.4, 0, 0, 0,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = SOLID;
-	sq->step = 4;
-	sq->aff.set(toAffine4(inverse(mat)));
-	sq->mat1.ambient.set(0.01, 0.01, 0.01);
-	sq->mat1.emissive.set(0.0, 0.0, 0.0);
-	sq->mat1.diffuse.set(0.01, 0.01, 0.01);
-	sq->mat1.specular.set(0, 0, 0);
-	sq->mat1.specularExponent = 12.8;
-	sq->mat1.reflective.set(1, 1, 1);
-
-	sc.setActiveobjects(7);
-	sc.setnthobject(7, sq);
-
-	mat.set4x4(0, 0, -3.6, -6.01,  // left MIRROR frame
-		0, 3.2, 0, 3.1,
-		3.6, 0, 0, 0,
-		0, 0, 0, 1);
-	sq = new square();
-	sq->textureNumber = SOLID;
-	sq->step = 4;
-	sq->aff.set(toAffine4(inverse(mat)));
-	sq->mat1.ambient.set(255.0 / 255.0 / 2, 69.0 / 255.0 / 2, 0);   // orange red, split ambient/diffuse
-	sq->mat1.emissive.set(0, 0, 0);
-	sq->mat1.diffuse.set(255.0 / 255.0 / 2, 69.0 / 255.0 / 2, 0);
-	sq->mat1.specular.set(0, 0, 0);
-	sq->mat1.specularExponent = 12.8;
-	sq->mat1.reflective.set(0, 0, 0);
-
-	sc.setActiveobjects(8);
-	sc.setnthobject(8, sq);
-
-	mat.set4x4(0.8, 0.0, 0.0, 3.0,  //pure reflective sphere
+	
+	mat.set4x4(0.8, 0.0, 0.0, 3.0,  //superellisoid
 		0.0, 0.8, 0.0, 2.8,
 		0.0, 0.0, 0.8, 1.0,
 		0.0, 0.0, 0.0, 1.0);
-	sp = new sphere();
-	sp->textureNumber = SOLID;
-	sp->aff.set(toAffine4(inverse(mat)));
-	material1.reflective.set(1.0, 1.0, 1.0);
-	material1.ambient.set(0.0, 0.0, 0.0);
-	material1.emissive.set(0.0, 0.0, 0.0);
-	material1.diffuse.set(0.0, 0.0, 0.0);
-	material1.specular.set(0.0, 0.0, 0.0);
+	se = new superellipsoid();
+	se->textureNumber = SOLID;
+	se->superexponent = 1;
+	se->aff.set(toAffine4(inverse(mat)));
+	material1.reflective.set(0.4, 0.2, 0.3);
+	material1.ambient.set(0.3, 0.2, 0.0);
+	material1.emissive.set(0.1, 0.0, 0.0);
+	material1.diffuse.set(0.3, 0.1, 0.3);
+	material1.specular.set(0.4, 0.6, 0.1);
 	material1.specularExponent = 100;
 
 	material2.reflective.set(.18, .181, .18);
@@ -314,14 +201,13 @@ void display(void)
 	material2.diffuse.set(0.394, 0.35, 0.25);
 	material2.specular.set(0.8, 0.8, 0.2);
 	material2.specularExponent = 11;
+	se->mat1 = material1;
+	se->mat2 = material1;
 
-	sp->mat1 = material1;
-	sp->mat2 = material1;
-
-	sc.setActiveobjects(9);
-	sc.setnthobject(9, sp);
-
-		mat.set4x4(0.8, 0.0, 0.0, 6.0,  //off-camera sphere
+	sc.setActiveobjects(3);
+	sc.setnthobject(3, se);
+	
+		mat.set4x4(0.8, 0.0, 0.0, 6.0,  
 		0.0, 0.8, 0.0, 2.8,
 		0.0, 0.0, 0.8, 1.0,
 		0.0, 0.0, 0.0, 1.0);
@@ -345,9 +231,9 @@ void display(void)
 	sp->mat1 = material1;
 	sp->mat2 = material1;
 
-	sc.setActiveobjects(10);
-	sc.setnthobject(10, sp);
-
+	sc.setActiveobjects(4);
+	sc.setnthobject(4, sp);
+	
 	int doRayTrace = 1;
 	if (doRayTrace)
 	{
@@ -366,7 +252,7 @@ void main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);  //  set the display mode
 	//	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  //  set the display mode
 	glutInitWindowSize(wid, hig);		//  set window size  
-	glutInitWindowPosition(150, 0);	// set window position on screen
+	glutInitWindowPosition(450, 0);	// set window position on screen
 	glutCreateWindow("  raytracing test  ");	// open the window	//  register the callback functions
 
 	//  glutReshapeFunc(myReshape);
